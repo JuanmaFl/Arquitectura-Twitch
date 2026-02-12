@@ -1,4 +1,3 @@
-# Arquitectura-Twitch
 flowchart TD
     subgraph SOURCES["🎥 FUENTES DE DATOS"]
         S1["🎮 Streamers\nRTMP / WebRTC"]
@@ -43,7 +42,6 @@ flowchart TD
         M3["🔭 Jaeger\nDistributed Tracing"]
     end
 
-    %% Fuentes → Ingesta
     S1 -->|"Stream RTMP"| I1
     S2 -->|"WS / HTTP"| I2
     S2 -->|"Eventos"| I3
@@ -51,18 +49,15 @@ flowchart TD
     S3 -->|"Interacciones"| I2
     S4 -->|"REST / EventSub"| I3
 
-    %% Ingesta → Kafka
     I1 -->|"Video chunks"| I4
     I2 -->|"Mensajes"| I4
     I3 -->|"Eventos analítica"| I4
 
-    %% Kafka → Procesamiento
     I4 -->|"Video stream"| P1
     I4 -->|"Stream events"| P2
     I4 -->|"User events"| P4
     I4 -->|"Reportes"| P3
 
-    %% Procesamiento → Almacenamiento
     P1 -->|"VODs y segmentos"| DB3
     P2 -->|"Métricas tiempo real"| DB4
     P3 -->|"Datos históricos"| DB4
@@ -70,7 +65,6 @@ flowchart TD
     P5 -->|"Logs de moderación"| DB5
     P2 -->|"Sesiones activas"| DB2
 
-    %% Almacenamiento → Entrega
     DB3 -->|"Contenido de video"| D1
     DB1 -->|"Perfil & datos"| D3
     DB2 -->|"Cache de respuestas"| D3
@@ -78,12 +72,10 @@ flowchart TD
     P1 -->|"Segmentos HLS"| D2
     D2 -->|"Manifiestos"| D1
 
-    %% Observabilidad
     PROCESSING -.->|"métricas"| M1
     DELIVERY -.->|"métricas"| M2
     INGESTION -.->|"trazas"| M3
 
-    %% Estilos
     classDef sources fill:#9b59b6,color:#fff,stroke:#7d3c98
     classDef ingestion fill:#2980b9,color:#fff,stroke:#1a5276
     classDef processing fill:#27ae60,color:#fff,stroke:#1e8449
